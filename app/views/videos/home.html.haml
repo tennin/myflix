@@ -1,0 +1,11 @@
+%article.video_category
+  -@categories.each do |cat|
+    %header
+      %h3= link_to cat.name.titleize, cat
+      %br
+      .videos.row
+        - cat.videos.each do |video|
+          .video.col-sm-2
+            = link_to video_path(video) do
+              %img(src="#{video.small_cover_url}")
+
