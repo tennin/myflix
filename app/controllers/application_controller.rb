@@ -2,7 +2,23 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
 
-  helper_method :youtube_embed
+  helper_method :youtube_embed, :logged_in?, :current_user
+
+  def current_user
+    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+  end
+
+  def logged_in?
+    !!current_user
+  end
+
+  def require_user
+    if !logged_in?
+      flash[:danger] = "Please log in first"
+      redirect_to sign_in_path
+    end
+  end
+
 
   def youtube_embed(youtube_url)
     if youtube_url[/youtu\.be\/([^\?]*)/]
